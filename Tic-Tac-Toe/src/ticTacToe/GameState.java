@@ -1,13 +1,16 @@
 package ticTacToe;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GameState {
     private Space[][] board;
     private int availableSpaces;
-    private int score;
-    private ArrayList<GameState> nextBoards = new ArrayList<GameState>();;
-    public GameState(Space[][] board, int availableSpaces) {
+    private Point move;
+    private ArrayList<GameState> nextBoards = new ArrayList<GameState>();
+
+    public GameState(Space[][] board, int availableSpaces, Point move) {
+        this.move = move;
         this.board = board;
         this.availableSpaces = availableSpaces;
     }
@@ -20,6 +23,14 @@ public class GameState {
         return availableSpaces;
     }
 
+    public Point getMove() {
+        return move;
+    }
+
+    public void setMove(Point move) {
+        this.move = move;
+    }
+
     public ArrayList<GameState> getNextBoards(boolean isX) {
         if (nextBoards.isEmpty())
         {
@@ -28,7 +39,30 @@ public class GameState {
         return nextBoards;
     }
 
-    public ArrayList<GameState> genNextBoards(boolean isX) {
+    public void showBoard() {
+        StringBuilder stringBuilder = new StringBuilder();
+        int i, j, n = board.length;
+        for (i = 0; i < n; i++) {
+            stringBuilder.append("[ ");
+            for (j = 0; j < n; j++) {
+                if (board[i][j] == Space.X) {
+                    stringBuilder.append("X ");
+                }
+                else if (board[i][j] == Space.O) {
+                    stringBuilder.append("O ");
+                }
+                else {
+                    stringBuilder.append("E ");
+                }
+            }
+            stringBuilder.append(" ]");
+            stringBuilder.append('\n');
+        }
+        System.out.println(stringBuilder.toString());
+    }
+
+
+    private ArrayList<GameState> genNextBoards(boolean isX) {
         Space space;
         if (isX) {
             space = Space.X;
@@ -43,13 +77,12 @@ public class GameState {
                 if (board[i][j] == Space.EMPTY) {
                     Space[][] newBoard = deepCopy();
                     newBoard[i][j] = space;
-                    nextBoards.add(new GameState(newBoard, availableSpaces + 1));
+                    nextBoards.add(new GameState(newBoard, availableSpaces + 1, new Point(i,j)));
                 }
             }
         }
         return nextBoards;
     }
-
 
     private Space[][] deepCopy() {
         int n = board.length;
