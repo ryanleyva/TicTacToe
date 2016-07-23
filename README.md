@@ -1,2 +1,2 @@
 # TicTacToe
-tic tac toe AI, using minimax algorithm
+Tic tac toe AI, using minimax algorithm
